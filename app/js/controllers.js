@@ -2,9 +2,9 @@
 var newsApp = angular.module('newsApp', [,'angular.less']);
 /* Controllers */
 newsApp.controller('NewsListCtrl', function ($scope, $http) {
-
+    $scope.news="undefined";
     //initialisation du model news à partir de l'API ADNEOM
-    $scope.news = $http({method: "GET", url: "http://adneom.herokuapp.com/api/posts"}).
+    $http({method: "GET", url: "http://adneom.herokuapp.com/api/posts"}).
         then(function(response) {
             $scope.news = response.data;
 
