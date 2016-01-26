@@ -1,28 +1,57 @@
 <!doctype html>
-<html lang="en" ng-app="phonecatApp">
+<html lang="en" ng-app="newsApp">
 <head>
-  <meta charset="utf-8">
-  <title>Google Phone Gallery</title>
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/animations.css">
-
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/animations.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/services.js"></script>
+    <meta charset="utf-8">
+    <title>Adneom News</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet/less" type="text/css" href="css/app.less">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="js/controllers.js"></script>
+    <script type="text/javascript" src="bower_components/less/dist/less.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular.js/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular.less/angular.less.js"></script>
 </head>
-<body>
 
-  <div class="view-container">
-    <div ng-view class="view-frame"></div>
-  </div>
+<body ng-controller="NewsListCtrl">
+<header>
+    <img class="logo inline" src="img/logo.png" alt="logoAdneom"/>
+    <p class="adneom inline">ADNEOM NEWS</p>
+    <ul class="orderBy inline" ng-model="typeOrder" ng-init="typeOrder='-upvotes'">
+        <li class="inline">Order by :</li>
+        <li class="orderType pointer inline" ng-click="typeOrder = '-upvotes'; reverse=!reverse">Upvote</li>
+    </ul>
+</header>
+
+<p class="addNews pointer" ng-click="showNews = !showNews; newNews={title: '', link: ''}" ng-init="showNews=false"><img src="img/plus.png" class="inline" alt="+"/>add a News</p>
+<form class="newsForm" ng-show="showNews" ng-submit="addNews(newNews);showNews = !showNews; newNews={title: '', link: ''}">
+    <label class="titleInput block"><input type="text" ng-maxlength="250" placeholder="what's the title" ng-model="newNews.title" required></label>
+    <label class="linkInput block"><input type="text" ng-maxlength="250" placeholder="Link please" ng-model="newNews.link" required></label>
+    <input class="submit pointer block" type="submit" value="Submit" />
+</form>
+<div class="spinner" ng-show="news == null">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+</div>
+<ul class="news">
+    <li  class="anew" ng-model="reverse" ng-init="reverse = false" ng-repeat="n in news | orderBy:typeOrder:reverse">
+        <a class="title block" ng-href="{{n.link}}">{{n.title}}</a>
+        <p class="like inline" ><img class="upvote pointer" ng-click="addLikeTo(n._id)" src="img/Upvote.png" alt="upvote"/>  {{n.upvotes}}  upvotes</p>
+        <img src="img/comment.png" alt="comment" class="showComments pointer inline" ng-click="bash = !bash" ng-init="bash=false">  comments</img>
+        <ul class="comments" ng-if="bash">
+            <li class="comment" ng-repeat="comment in n.comments | orderBy:'-upvotes':true">
+                <p class="commentAuthor">by {{comment.author}}</p>
+                <p class="commentContent">{{comment.body}}</p>
+            </li>
+            <p class="addComment pointer" ng-click="showCom = !showCom; newComment={body: '', author: ''}" ng-init="showCom=false"><img src="img/plus.png" class="inline" alt="+"/>add comment</p>
+            <form class="commentForm" ng-show="showCom" ng-submit="addCommentTo(n._id, newComment, newAuthor);showCom = !showCom; newComment={body: '', author: ''}">
+                <label class="authorInput block"><input type="text" ng-maxlength="20" placeholder="what's your name" ng-model="newComment.author" autofocus></label>
+                <label class="commentInput block"><input type="text" ng-maxlength="250" placeholder="write your comments" ng-model="newComment.body"></label>
+                <input class="submit pointer block" type="submit" value="Submit" />
+            </form>
+        </ul>
+    </li>
+</ul>
+
 
 </body>
 </html>
