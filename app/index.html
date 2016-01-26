@@ -28,7 +28,7 @@
     <label class="linkInput block"><input type="text" ng-maxlength="250" placeholder="Link please" ng-model="newNews.link" required></label>
     <input class="submit pointer block" type="submit" value="Submit" />
 </form>
-<div class="spinner" ng-show="news == null">
+<div class="spinner" ng-show="news == 'undefined'">
     <div class="double-bounce1"></div>
     <div class="double-bounce2"></div>
 </div>
